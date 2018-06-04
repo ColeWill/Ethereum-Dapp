@@ -5,7 +5,7 @@ var electionInstance
 contract("Election", function(accounts){
     // see that contract was intitialized with the correct number of candidates
 
-    it('initializes with two candidates ln8', function(){
+    it('1: initializes with two candidates ln8', function(){
         // fetch an instance of the deployed contract
         return Election.deployed().then(function(instance){
             return instance.candidatesCount();
@@ -15,7 +15,7 @@ contract("Election", function(accounts){
         });
     });
 
-    it("it initializes the candidates with the correct values ln18", function(){
+    it("2: it initializes the candidates with the correct values ln18", function(){
         return Election.deployed().then(function(instance){
             electionInstance = instance;
             return electionInstance.candidates(1);
@@ -32,7 +32,7 @@ contract("Election", function(accounts){
     });
     // check to see that vote increments by 1
     // check to make sure the account is added to the voters mapping
-    it("allows a voter to cast a vote ln35", function(){
+    it("3: allows a voter to cast a vote ln35", function(){
         // gets a copy of deployed contract
         return Election.deployed().then(function(instance){
             electionInstance = instance;
@@ -51,8 +51,7 @@ contract("Election", function(accounts){
             assert.equal(voteCount, 1, "increments the candidate's vote count");
         });
     });
-
-    it("throws an exception for invalid candidates ln55", function(){
+    it("4: throws an exception for invalid candidates ln55", function(){
         // fetch an instance of our app
         return Election.deployed().then(function(instance){
             electionInstance = instance;
@@ -73,6 +72,7 @@ contract("Election", function(accounts){
             // assert that cand2 still does not have any votes
             assert.equal(voteCount, 0, "candidate 2 did not receive any votes");
         });
+    });
     it("throws an exception for double voting ln74", function(){
         return Election.deployed().then(function(instance){
             electionInstance = instance;
@@ -91,11 +91,10 @@ contract("Election", function(accounts){
         }).then(function(candidate1){
             var voteCount = candidate1[2];
             assert.equal(voteCount, 1, "Candidate 1 did not get new votes");
-            return electionInstance.canddiates(2);
+            return electionInstance.candidates(2);
         }).then(function(candidate2){
             var voteCount = candidate2[2];
             assert.equal(voteCount, 1 , "candidate 2 did not get new votes");
         });
-    });   
     });
 });
