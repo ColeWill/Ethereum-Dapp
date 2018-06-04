@@ -18,7 +18,7 @@ contract Election {
     // Store Candidates Count
     uint public candidatesCount;
 
-    // voted event
+    // voted event triggered when a vote is cast
     event votedEvent (
         uint indexed _candidateId
     );
@@ -27,8 +27,8 @@ contract Election {
     
     function Election() public{
         //run whenever our contract is migrated and deployed
-        addCandidate('Candidate1');
-        addCandidate('Candidate2');
+        addCandidate('PeanutButter');
+        addCandidate('Jelly');
     }
 
     function addCandidate (string _name) private {

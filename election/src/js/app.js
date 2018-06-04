@@ -41,9 +41,9 @@ App = {
       // Restart Chrome if you are unable to receive this event
       // This is a known issue with Metamask
       // https://github.com/MetaMask/metamask-extension/issues/2393
-      instance.votedEvent({}, {
-        fromBlock: 0,
-        toBlock: 'latest'
+      instance.votedEvent({}, { // sol allows us to pass in a filter witch is the empty obj
+        // fromBlock: 0, // results in double render of the election results 
+        toBlock: 'latest' // the meta data from the latest block
       }).watch(function(error, event) {
         console.log("event triggered", event)
         // Reload when a new vote is recorded
@@ -89,11 +89,11 @@ App = {
           var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
           candidatesResults.append(candidateTemplate);
 
-          // Render candidate ballot option
+          // Render candidate ballot option inside of the voteing form
           var candidateOption = "<option value='" + id + "' >" + name + "</ option>"
           candidatesSelect.append(candidateOption);
         });
-      }
+      } // if account has already voted, returns true and form is hidden
       return electionInstance.voters(App.account);
     }).then(function(hasVoted) {
       // Do not allow a user to vote
@@ -106,11 +106,11 @@ App = {
       console.warn(error);
     });
   },
-
+  // casts the vote 
   castVote: function() {
-    var candidateId = $('#candidatesSelect').val();
+    var candidateId = $('#candidatesSelect').val(); // get the candidate Id
     App.contracts.Election.deployed().then(function(instance) {
-      return instance.vote(candidateId, { from: App.account });
+      return instance.vote(candidateId, { from: App.account }); // calls the vote function w/ current account
     }).then(function(result) {
       // Wait for votes to update
       $("#content").hide();

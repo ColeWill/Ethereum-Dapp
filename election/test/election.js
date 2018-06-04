@@ -21,12 +21,12 @@ contract("Election", function(accounts){
             return electionInstance.candidates(1);
         }).then(function(candidate){
             assert.equal(candidate[0], 1, "contains the correct id");
-            assert.equal(candidate[1], "Candidate1", "Contains the correct name");
+            assert.equal(candidate[1], "PeanutButter", "Contains the correct name");
             assert.equal(candidate[2], 0, "contains the correct votes count");
             return electionInstance.candidates(2);
         }).then(function(candidate){
             assert.equal(candidate[0],2,"contains the correct id");
-            assert.equal(candidate[1], "Candidate2", "contains the correct name");
+            assert.equal(candidate[1], "Jelly", "contains the correct name");
             assert.equal(candidate[2], 0, "contains the correct votes count");
         });
     });
@@ -40,7 +40,9 @@ contract("Election", function(accounts){
             // we pass in the app meta data and the candidate id
             return electionInstance.vote(candidateId, {from: accounts[0] });
         }).then(function(receipt){
-            // read the voter's mapping and reads the account mapping
+            assert.equal(receipt.logs.length, 1, "an event was triggered"); // assert it has logs
+            assert.equal(receipt.logs[0].event, "votedEvent", " the event type is correct"); //asert that event = votedEvent
+            assert.equal(receipt.logs[0].args._candidateId.toNumber(), candidateId, "the candidateId is correct");
             return electionInstance.voters(accounts[0]);
             // returns the boolean value to see if the account has voted
         }).then(function(voted){
@@ -73,7 +75,7 @@ contract("Election", function(accounts){
             assert.equal(voteCount, 0, "candidate 2 did not receive any votes");
         });
     });
-    it("throws an exception for double voting ln74", function(){
+    it("5: throws an exception for double voting ln74", function(){
         return Election.deployed().then(function(instance){
             electionInstance = instance;
             candidateId = 2;
